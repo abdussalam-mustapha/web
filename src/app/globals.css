@@ -344,7 +344,7 @@ background:linear-gradient(rgba(0,0,0,.09),rgba(0,0,0,0) 14%),linear-gradient(17
 #flg{transform-origin:96px 45px;animation:wave 1.1s ease-in-out infinite}#sc{transform-origin:112px 80px;animation:wave 1.3s ease-in-out infinite}
 @keyframes wave{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(8deg)}}
 .cld{animation:drift 14s ease-in-out infinite alternate}.cld.c2{animation-duration:19s}@keyframes drift{to{transform:translateX(34px)}}
-.sunr{transform-origin:205px 48px;animation:spin 18s linear infinite}.wv{animation:sway 3.2s ease-in-out infinite}@keyframes sway{50%{transform:translateX(-14px)}}
+.sunr{transform-origin:205px 48px;animation:spin 18s linear infinite}.wv{animation:wvsway 3.2s ease-in-out infinite}@keyframes wvsway{50%{transform:translateX(-14px)}}
 @media (prefers-reduced-motion:reduce){#hero,#flg,#sc,.cld,.sunr,.wv{animation:none}}
 footer{padding:1.5rem 0 3rem;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font:600 1rem var(--d);color:var(--muted)}footer a{margin-right:1.2rem}
 #cur{position:fixed;left:0;top:0;width:34px;height:34px;margin:-17px 0 0 -17px;border:2px solid var(--c1);border-radius:50%;pointer-events:none;z-index:60;transition:width .2s,height .2s,margin .2s,background .2s;opacity:0}
@@ -368,3 +368,51 @@ footer{padding:1.5rem 0 3rem;display:flex;justify-content:space-between;gap:1rem
 .still *{animation:none!important;transition:none!important}
 .still .note,.still .note:hover,.still a.note:hover{transform:translate(var(--dx),var(--dy)) rotate(var(--r,0deg))!important}
 .still .note .ph{display:inline-block;margin-top:.6rem;border-color:#2a2418;color:#2a2418;font-size:1.2rem}
+
+/* <main> is focused after each page change for screen readers; it is not interactive, so no ring. */
+#main:focus{outline:none}
+
+/* ---------- Motion smoothing ---------- */
+/* Tilt angles are typed so they interpolate on their own, without restarting the springy transform transition. */
+@property --rx{syntax:"<angle>";inherits:false;initial-value:0deg}
+@property --ry{syntax:"<angle>";inherits:false;initial-value:0deg}
+.note{transition:transform .32s cubic-bezier(.25,1.35,.5,1),box-shadow .32s ease,--rx .2s ease-out,--ry .2s ease-out;backface-visibility:hidden}
+.note:hover,.note.drag{will-change:transform}
+.mtool,.etool{will-change:transform,opacity;transition:opacity .2s ease}
+
+/* Sheet / lightbox: fade the backdrop in, and fold the sheet away on close instead of vanishing. */
+#story.on{animation:bdin .25s ease both}
+#story.off{animation:bdout .22s ease-in both}
+#story.off .sheet,#story.off .lbx{animation:sheetout .22s cubic-bezier(.4,0,1,1) both}
+.lbx{animation:zoomin .3s cubic-bezier(.2,.9,.3,1) both}
+@keyframes bdin{from{background-color:rgba(10,10,12,0)}}
+@keyframes bdout{to{background-color:rgba(10,10,12,0)}}
+@keyframes sheetout{to{transform:translateY(24px) scale(.96);opacity:0}}
+@keyframes zoomin{from{transform:scale(.94);opacity:0}}
+
+/* Command palette */
+#pal.o{animation:bdin .18s ease both}
+#pal.o div.b{animation:palin .22s cubic-bezier(.2,.9,.3,1) both}
+@keyframes palin{from{transform:translateY(-12px) scale(.98);opacity:0}}
+
+#cv2{will-change:transform}
+/* Shown only if the next page takes a moment: the title breathes and a thin line runs along the bottom. */
+#cv2.wait{animation:cvbreathe 1.4s ease-in-out infinite}
+#cv2.wait::after{content:"";position:absolute;left:0;bottom:0;height:6px;width:30%;background:var(--on);opacity:.35;animation:cvload 1.1s cubic-bezier(.65,0,.35,1) infinite}
+@keyframes cvbreathe{50%{color:color-mix(in srgb,var(--on) 70%,var(--accent))}}
+@keyframes cvload{from{transform:translateX(-100%)}to{transform:translateX(340%)}}
+
+@media (prefers-reduced-motion:reduce){
+#story.on,#story.off,#story.off .sheet,#story.off .lbx,.lbx,#pal.o,#pal.o div.b,#cv2.wait,#cv2.wait::after{animation:none}
+.note{transition:none}
+}
+
+/* Photo in the whiteboard polaroid: square, slightly warm like a printed photo. */
+.pol .pimg,.polaroid .pimg,.pol2 .pimg{display:block;width:100%;height:auto;aspect-ratio:1;object-fit:cover;filter:sepia(.08) saturate(1.05) contrast(1.02);box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)}
+
+/* Story sheet without a photo (placeholders hidden): text spans the sheet. */
+.sheet.nophoto{grid-template-columns:1fr}
+
+/* Pencil sketches on the Fun notes (same treatment as the Tools logos) */
+.lgw .sk{width:min(180px,100%);height:auto;overflow:visible;transform:rotate(-3deg)}
+.note:nth-child(even) .lgw .sk{transform:rotate(2.5deg)}

@@ -22,6 +22,17 @@ export function SvgDefs() {
           <feTurbulence type="fractalNoise" baseFrequency=".2" numOctaves={2} seed={4} result="n" />
           <feDisplacementMap in="SourceGraphic" in2="n" scale=".6" />
         </filter>
+        {/* Larger-scale pencil textures for the 200-unit sketches on the Fun page */}
+        <pattern id="hatch-l" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(40)">
+          <line x1="0" y1="0" x2="0" y2="5" stroke="#2b2b2b" strokeWidth=".8" />
+        </pattern>
+        <pattern id="xhatch-l" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(40)">
+          <path d="M0 0V4M0 0H4" stroke="#2b2b2b" strokeWidth=".75" />
+        </pattern>
+        <filter id="pcl-l" x="-10%" y="-10%" width="120%" height="120%">
+          <feTurbulence type="fractalNoise" baseFrequency=".05" numOctaves={2} seed={7} result="n" />
+          <feDisplacementMap in="SourceGraphic" in2="n" scale="3" />
+        </filter>
         <pattern id="hatch" width="1" height="1" patternUnits="userSpaceOnUse" patternTransform="rotate(40)">
           <line x1="0" y1="0" x2="0" y2="1" stroke="#2b2b2b" strokeWidth=".17" />
         </pattern>

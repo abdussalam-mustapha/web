@@ -28,8 +28,13 @@ export interface Story {
   c: string;
   /** Pin colour */
   p: string;
-  /** Photo placeholder text */
+  /** Photo placeholder text (shown until `img` is set) */
   photo: string;
+  /** Real photo for the sheet's polaroid (path in /public) */
+  img?: string;
+  imgAlt?: string;
+  /** CSS object-position for the square crop, e.g. "left top" */
+  imgPos?: string;
   body: string[];
   /** Placeholder line (dashed box) */
   ph?: string;

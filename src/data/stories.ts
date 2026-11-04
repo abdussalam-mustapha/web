@@ -5,6 +5,7 @@ export const STORIES: Story[] = [
   {
     tag: "Build", t: "From intern to CTO", c: "#ffe66d", p: "#e63946",
     photo: "Add a screenshot of something you built",
+    img: "/port66/port66-hero-square.jpg", imgAlt: "The Port66 collectors marketplace",
     body: [
       "My first role in tech was an internship at TechGen Africa in 2022, and I have kept building ever since.",
       "Frontend and fullstack roles across fintech, restaurant software and Web3 taught me how products behave in the real world, and leading two developers at GetBlack taught me how to build with other people.",
@@ -25,6 +26,7 @@ export const STORIES: Story[] = [
   {
     tag: "Grow", t: "The people part", c: "#a8f0cf", p: "#e63946",
     photo: "Add a photo from a community event",
+    img: "/mustapha-event.jpg", imgAlt: "Mustapha at a tech community event",
     body: [
       "I joined TechGen Africa as an intern in 2022 and was named Best Intern. I also served as Community Lead there, helping grow a community of hundreds through events, workshops and mentorship.",
       "I have served as Technical Lead at OSSGuild and on the core team of the Google Developer Student Club at the University of Ilorin.",
@@ -55,6 +57,7 @@ export const STORIES: Story[] = [
   {
     tag: "Contact", t: "Let us build something", c: "#c5f27a", p: "#7b2cbf",
     photo: "Add a friendly photo of you",
+    img: "/mustapha.jpg", imgAlt: "Portrait of Mustapha",
     body: ["Whether you want to build a product, start a community, or learn to code, I would love to hear from you."],
     h: "/about", go: "Get in touch",
   },

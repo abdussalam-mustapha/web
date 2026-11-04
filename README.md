@@ -1,36 +1,25 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Mustapha's portfolio (Next.js)
 
-## Getting Started
-
-First, run the development server:
+The Next.js (App Router, TypeScript) version of `../index.html`. It is a static export: `npm run build` writes a plain site to `out/` that any static host can serve.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev      # http://localhost:3000
+npm run build    # static site in out/
+npm run lint
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Where things live
+- `src/app/`: one folder per route (`/engineering`, `/work`, `/work/port66`, `/tools`, `/content`, `/content/writings`, `/content/bookmarks`, `/community`, `/teaching`, `/fun`, `/about`, `/guestbook`, `/desk`, `/rabbit-hole`). `globals.css` is the original stylesheet, ported verbatim.
+- `src/data/`: all copy and content (stories, roles, timeline, chapters, tools, contact links). Edit text here.
+- `src/components/site/`: app shell. `SiteProvider` (page curtain, toast, sheet state), `Sheet` (story, role, finale, lightbox), `Header`, `CommandPalette`, `Intro`, `Chrome` (scroll bar, cursor tag, footer clothesline), `NextChapter`.
+- `src/components/notes/`: `Note` (pin, drag, tilt, READ stamp, opens sheets), `Board`, `Strings`, `ToolLogo`.
+- `src/components/home/Whiteboard.tsx`: the hero (marker writing, eraser, drawing canvas).
+- `src/components/work/Timeline.tsx`: the career timeline on a string.
+- `src/components/pages/`: Port66 shots, writings filter, desk, guestbook, terminal.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Notes
+- localStorage keys match the old site (`read`, `fin`, `gb`), so returning visitors keep their READ stamps and guestbook notes.
+- Old hash links (`/#about`) redirect to the real routes.
+- The guestbook is browser-only. To make it a shared wall, replace `load()`/`save()` in `src/components/pages/Guestbook.tsx` with a backend (with moderation and rate limiting).
+- See `../CONVERSION_NOTES.md` for content rules and the placeholders still to fill.
