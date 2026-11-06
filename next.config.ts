@@ -8,6 +8,8 @@ const nextConfig: NextConfig = {
   output: "export",
   trailingSlash: true,
   images: { unoptimized: true },
+  // The dev-only "N" badge sat on top of the mobile tab bar. Errors still show when they happen.
+  devIndicators: false,
 };
 
 export default nextConfig;

@@ -35,11 +35,11 @@ export const STORIES: Story[] = [
     h: "/community", go: "Meet the community",
   },
   {
-    tag: "Impact", t: "First lines of HTML", c: "#d2bfff", p: "#f4a261",
+    tag: "Impact", t: "Raising future builders", c: "#d2bfff", p: "#f4a261",
     photo: "Add a photo of your learners",
     body: [
-      "I run STEMTisha FutureCoders, a program that teaches younger learners HTML and web fundamentals.",
-      "I mix design thinking and project management into how I teach, because the goal is not to memorize syntax. It is to learn how to build.",
+      "I run STEMTisha FutureCoders, a program that introduces younger learners to STEM and engineering, from their first lines of code to thinking like engineers.",
+      "I mix design thinking and project management into how I teach, because the goal is not to memorize formulas or syntax. It is to learn how to build.",
     ],
     ph: "Add how many learners you have taught and one thing a student built.",
     h: "/teaching", go: "See the teaching page",

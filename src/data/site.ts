@@ -7,7 +7,7 @@ export const CHAPTERS: Chapter[] = [
   { id: "engineering", title: "Engineering", tag: "Build", blurb: "From the first lines of code to CTO.", c: "--accent" },
   { id: "content", title: "Content", tag: "Share", blurb: "What I write, save and put out online.", c: "--c4" },
   { id: "community", title: "Community", tag: "Grow", blurb: "The people I have helped bring together.", c: "--c2" },
-  { id: "teaching", title: "Teaching", tag: "Impact", blurb: "Helping younger learners write their first HTML.", c: "--c3" },
+  { id: "teaching", title: "Teaching", tag: "Impact", blurb: "Opening up STEM and engineering to younger learners.", c: "--c3" },
   { id: "hobbies", title: "Fun", tag: "Play", blurb: "Anime, the gym and Strava kilometers.", c: "--c1" },
   { id: "about", title: "Say hi", tag: "Contact", blurb: "Who I am, and how to reach me.", c: "#c5f27a" },
 ];
@@ -34,13 +34,13 @@ export const TOOLS: [string, string][] = [
 ];
 
 export const TEACH = [
-  { t: "STEMTisha FutureCoders", m: "The program I run. Younger learners start with HTML and web fundamentals, with design thinking built in." },
-  { t: "Techgen Africa", m: "Community Lead. I built and led a community of hundreds of tech enthusiasts with events, workshops and mentorship, after starting there as an intern and being named Best Intern." },
+  { t: "STEMTisha FutureCoders", m: "The program I run. Younger learners explore STEM and engineering, starting with their first lines of code, with design thinking built in." },
+  { t: "TechGen Africa", m: "Built and led a tech community of hundreds." },
 ];
 
 /** Placeholder posts for /content/writings. Replace with real posts. */
 export const POSTS: { title: string; cat: string }[] = [
-  { title: "What teaching HTML taught me about shipping", cat: "notes" },
+  { title: "What teaching taught me about shipping", cat: "notes" },
   { title: "Putting real-world assets on Solana", cat: "engineering" },
   { title: "The small details users feel", cat: "craft" },
 ];

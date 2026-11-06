@@ -136,6 +136,7 @@ export function Timeline() {
                   key={role}
                   className="tn"
                   type="button"
+                  data-role={role}
                   style={{ "--c": CS[i % 5], "--cc": CC[i % 5], "--dl": `${-i * 0.7}s` } as CSSProperties}
                   onClick={(e) => openStory(role, "roles", e.currentTarget)}
                 >

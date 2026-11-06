@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, type CSSProperties } from "react";
+import { useEffect, useLayoutEffect, useRef, type CSSProperties } from "react";
 import { STORIES } from "@/data/stories";
 import { ROLES } from "@/data/roles";
 import { SHOTS } from "@/data/site";
@@ -9,6 +9,8 @@ import { Icon } from "@/components/ui/Icon";
 import { useFocusTrap } from "@/lib/useFocusTrap";
 import { SHOW_PLACEHOLDERS } from "@/data/placeholders";
 import { Ph } from "@/components/ui/Ph";
+import { reducedMotion } from "@/lib/browser";
+import { flyOpen, flyClose } from "@/lib/noteFlight";
 
 export type SheetState =
   | null
@@ -20,7 +22,11 @@ interface Props {
   state: SheetState;
   /** True while the close animation plays. */
   closing?: boolean;
+  /** The note (or card / screenshot) that was clicked: the sheet grows out of it. */
+  origin?: Element | null;
   onClose: () => void;
+  /** Called once the close animation has finished. */
+  onClosed: () => void;
   onStep: (d: number) => void;
 }
 
@@ -42,11 +48,43 @@ function Photo({ text, img, alt, pos }: { text: string; img?: string; alt?: stri
 }
 
 /** The big lined-paper sheet (stories, roles, finale) and the screenshot lightbox. */
-export function Sheet({ state, closing, onClose, onStep }: Props) {
+export function Sheet({ state, closing, origin, onClose, onClosed, onStep }: Props) {
   const root = useRef<HTMLDivElement>(null);
   const closeBtn = useRef<HTMLButtonElement>(null);
   const open = !!state;
   useFocusTrap(root, open);
+
+  // Open: grow the sheet out of the clicked note (before the first paint, so nothing flashes).
+  const flew = useRef(false);
+  useLayoutEffect(() => {
+    if (!open) return;
+    const el = root.current?.firstElementChild as HTMLElement | null;
+    flew.current = !!(el && origin && !reducedMotion() && flyOpen(el, origin));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
+
+  // Close: fold back onto the note for the story now showing (it may differ after Next/Previous).
+  useEffect(() => {
+    if (!closing || !state) return;
+    const el = root.current?.firstElementChild as HTMLElement | null;
+    let target: Element | null = null;
+    if (state.kind === "story") {
+      const attr = state.set === "roles" ? "role" : "story";
+      const mine = origin?.getAttribute(`data-${attr}`) === String(state.i);
+      target = mine ? origin! : document.querySelector(`main [data-${attr}="${state.i}"]`);
+    } else if (state.kind === "shot") {
+      target = origin ?? null;
+    }
+    let done = false;
+    const finish = () => { if (!done) { done = true; onClosed(); } };
+    if (el && target && flew.current !== null && !reducedMotion()) {
+      root.current!.classList.add("fly");
+      flyClose(el, target).then((ok) => { if (ok) finish(); else setTimeout(finish, 220); });
+    } else {
+      setTimeout(finish, reducedMotion() ? 0 : 220);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [closing]);
 
   // Focus the close button whenever a new sheet opens.
   const kind = state?.kind;
@@ -83,16 +121,18 @@ export function Sheet({ state, closing, onClose, onStep }: Props) {
     content = (
       <div className="sheet" style={{ "--c": "#ffe66d", "--pin": "#e63946" } as CSSProperties}>
         <Pin />
-        <Photo text="Add a photo of you" img="/mustapha.jpg" alt="Portrait of Mustapha" />
-        <div>
-          <span className="nt">The end</span>
-          <h2>You have met the whole board</h2>
-          <p>Seven stories, one person: the builder, the sharer, the community person, the teacher and the one who goes on long walks.</p>
-          <p>If any of it made you think of a project, a team or a class, I would love to hear about it.</p>
+        <div className="sbody">
+          <Photo text="Add a photo of you" img="/mustapha.jpg" alt="Portrait of Mustapha" />
+          <div>
+            <span className="nt">The end</span>
+            <h2>You have met the whole board</h2>
+            <p>Seven stories, one person: the builder, the sharer, the community person, the teacher and the one who goes on long walks.</p>
+            <p>If any of it made you think of a project, a team or a class, I would love to hear about it.</p>
+          </div>
         </div>
         <div className="sbar">
-          <a className="btn" href="/about" onClick={onClose}>Say hi</a>
-          <a className="btn o" href="/guestbook" onClick={onClose}>Leave a note</a>
+          <a className="btn" href="/about">Say hi</a>
+          <a className="btn o" href="/guestbook">Leave a note</a>
           <button className="btn o" ref={closeBtn} type="button" onClick={onClose}>Keep exploring</button>
         </div>
       </div>
@@ -113,6 +153,8 @@ export function Sheet({ state, closing, onClose, onStep }: Props) {
         style={{ "--c": s.c, "--pin": s.p } as CSSProperties}
       >
         <Pin />
+        {/* Photo + writing. On phones this part scrolls inside the sheet; the buttons stay put. */}
+        <div className="sbody">
         {r ? (
           <div className="gl">
             <b>ROLE</b><p>{r.tag}</p>
@@ -134,11 +176,13 @@ export function Sheet({ state, closing, onClose, onStep }: Props) {
           )}
           {s.ph && <Ph>{s.ph}</Ph>}
         </div>
+        </div>
         <div className="sbar">
           <button className="btn o" type="button" onClick={() => onStep(-1)}>Previous</button>
           <span className="cnt">{state.i + 1} of {total}</span>
           <button className="btn o" type="button" onClick={() => onStep(1)}>Next {r ? "role" : "story"}</button>
-          {s.h && <a className="btn" href={s.h} onClick={onClose}>{s.go}</a>}
+          {/* Links leave the page: the curtain covers the sheet, then it is removed (see SiteProvider). */}
+          {s.h && <a className="btn" href={s.h}>{s.go}</a>}
           <button className="btn o" ref={closeBtn} type="button" onClick={onClose}>Close</button>
         </div>
       </div>

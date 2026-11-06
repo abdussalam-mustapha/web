@@ -10,7 +10,7 @@ const C: Record<string, string> = {
   help: "help, whoami, port66, teach, stack, email, anime, lucky, reset, clear",
   whoami: "Mustapha. CTO, engineer, teacher.",
   port66: "Marketplace plus on-chain pools. Visit port66.xyz.",
-  teach: "STEMTisha FutureCoders and Techgen Africa.",
+  teach: "STEMTisha FutureCoders and TechGen Africa.",
   stack: "TypeScript, React, Next.js, Node, Python, Solidity, Rust.",
   email: EMAIL,
   anime: "Power level rising...",

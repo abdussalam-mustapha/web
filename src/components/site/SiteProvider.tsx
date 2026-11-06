@@ -7,6 +7,7 @@ import { STORIES } from "@/data/stories";
 import { readStore } from "@/lib/readStore";
 import { reducedMotion, confetti } from "@/lib/browser";
 import { Sheet, type SheetState } from "./Sheet";
+import { landAll } from "@/lib/noteFlight";
 
 interface SiteApi {
   toast: (msg: string) => void;
@@ -48,15 +49,26 @@ export function SiteProvider({ children }: { children: ReactNode }) {
   const busy = useRef(false);
   const waitTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
   const dropDone = useRef<Promise<unknown>>(Promise.resolve());
+  // Set further down once the sheet state exists. Leaving the page from an open sheet must not
+  // play its fold-back animation: the curtain covers it and it is removed out of sight.
+  const sheetOpen = useRef(false);
+  const dropSheet = useRef<() => void>(() => {});
+  const closeSheet = useRef<() => void>(() => {});
 
   const navigate = useCallback(
     (href: string) => {
       const target = href.replace(/\/+$/, "") || "/";
       const here = (pathname || "/").replace(/\/+$/, "") || "/";
-      if (target === here || busy.current) return;
+      if (busy.current) return;
+      if (target === here) {
+        if (sheetOpen.current) closeSheet.current(); // link back to this page: just close the sheet
+        return;
+      }
       const id = idFromPath(target);
       const c = curtain.current;
+      const leavingSheet = sheetOpen.current;
       if (!c || reducedMotion() || !c.animate) {
+        if (leavingSheet) dropSheet.current();
         router.push(href);
         return;
       }
@@ -67,6 +79,8 @@ export function SiteProvider({ children }: { children: ReactNode }) {
       c.classList.remove("wait");
       const drop = c.animate([{ transform: "translateY(100%)" }, { transform: "translateY(0)" }], { ...DROP, fill: "forwards" });
       dropDone.current = drop.finished.catch(() => {});
+      // Remove an open sheet only once the curtain fully covers the screen.
+      if (leavingSheet) drop.finished.then(() => dropSheet.current(), () => dropSheet.current());
       // Start the page swap just before the drop ends (the last uncovered strip sits behind the
       // identical header), so the new page is usually ready the moment the curtain is down.
       setTimeout(() => {
@@ -133,11 +147,14 @@ export function SiteProvider({ children }: { children: ReactNode }) {
   const [closing, setClosing] = useState(false);
   const closeTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
   const lastFocus = useRef<Element | null>(null);
+  /** The clicked note: the sheet opens out of it and folds back onto it. */
+  const [origin, setOrigin] = useState<Element | null>(null);
 
   const openStory = useCallback((i: number, set: "stories" | "roles", from?: Element | null) => {
     lastFocus.current = from ?? document.activeElement;
     readStore.mark((set === "roles" ? "r" : "s") + i);
     clearTimeout(closeTimer.current);
+    setOrigin(from ?? null);
     setClosing(false);
     setSheet({ kind: "story", set, i, flip: false });
   }, []);
@@ -145,23 +162,33 @@ export function SiteProvider({ children }: { children: ReactNode }) {
   const openShot = useCallback((i: number, from?: Element | null) => {
     lastFocus.current = from ?? document.activeElement;
     clearTimeout(closeTimer.current);
+    setOrigin(from ?? null);
     setClosing(false);
     setSheet({ kind: "shot", i });
   }, []);
 
+  // Mirror of `sheet` for event handlers, so Next/Previous can mark the story read outside a
+  // state updater (marking inside one re-rendered the notes mid-render).
+  const sheetRef = useRef<SheetState>(null);
+  useEffect(() => { sheetRef.current = sheet; }, [sheet]);
+
   const step = useCallback((d: number) => {
-    setSheet((s) => {
-      if (!s || s.kind !== "story") return s;
-      const n = s.set === "roles" ? 9 : STORIES.length;
-      const i = (s.i + d + n) % n;
-      readStore.mark((s.set === "roles" ? "r" : "s") + i);
-      return { ...s, i, flip: true };
-    });
+    const s = sheetRef.current;
+    if (!s || s.kind !== "story") return;
+    const n = s.set === "roles" ? 9 : STORIES.length;
+    const i = (s.i + d + n) % n;
+    readStore.mark((s.set === "roles" ? "r" : "s") + i);
+    const next: SheetState = { ...s, i, flip: true };
+    sheetRef.current = next;
+    setSheet(next);
   }, []);
 
   const finishClose = useCallback(() => {
+    clearTimeout(closeTimer.current);
     setClosing(false);
     setSheet(null);
+    setOrigin(null);
+    landAll();
     const f = lastFocus.current as HTMLElement | null;
     if (f && f.focus) f.focus();
     const st = readStore.get();
@@ -178,15 +205,25 @@ export function SiteProvider({ children }: { children: ReactNode }) {
   const close = useCallback(() => {
     if (reducedMotion()) { finishClose(); return; }
     setClosing(true);
+    // The sheet calls onClosed when its fold-back lands; this is only a safety net.
     clearTimeout(closeTimer.current);
-    closeTimer.current = setTimeout(finishClose, 220);
+    closeTimer.current = setTimeout(finishClose, 1000);
   }, [finishClose]);
+
+  useEffect(() => {
+    sheetOpen.current = !!sheet;
+    dropSheet.current = finishClose;
+    closeSheet.current = close;
+  }, [sheet, finishClose, close]);
 
   // Lock page scroll while a sheet is open.
   useEffect(() => {
     if (!sheet) return;
+    // Pad by the scrollbar width so the page (and the notes the sheet flies to) does not shift.
+    const sb = innerWidth - document.documentElement.clientWidth;
     document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = ""; };
+    if (sb > 0) document.body.style.paddingRight = sb + "px";
+    return () => { document.body.style.overflow = ""; document.body.style.paddingRight = ""; };
   }, [sheet]);
 
   const api = useMemo<SiteApi>(() => ({ toast, navigate, openStory, openShot }), [toast, navigate, openStory, openShot]);
@@ -194,7 +231,7 @@ export function SiteProvider({ children }: { children: ReactNode }) {
   return (
     <SiteCtx.Provider value={api}>
       {children}
-      <Sheet state={sheet} closing={closing} onClose={close} onStep={step} />
+      <Sheet state={sheet} closing={closing} origin={origin} onClose={close} onClosed={finishClose} onStep={step} />
       <div id="cv2" ref={curtain} aria-hidden="true">{curtainText}</div>
       <div id="st" role="status" aria-live="polite" style={{ display: toastMsg ? "block" : "none" }}>{toastMsg}</div>
     </SiteCtx.Provider>

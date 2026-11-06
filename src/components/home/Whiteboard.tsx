@@ -11,7 +11,6 @@ const PHRASES = [
   "products people use.",
   "communities that last.",
   "builders out of beginners.",
-  "time for anime and Strava.",
   "the most of every lucky day.",
 ];
 
@@ -315,10 +314,6 @@ export function Whiteboard() {
         </div>
       </div>
       <p className="hint">Pick up a marker and draw on the board. The eraser is on the right.</p>
-      <p className="lede" style={{ margin: "1.2rem auto 0", maxWidth: "62ch", textAlign: "center" }}>
-        Engineer by trade, teacher and community builder by habit, and a very active human outside of work. Every note on this
-        board is a story, and each one opens up to show you what happened behind it.
-      </p>
       </div>
     </section>
   );

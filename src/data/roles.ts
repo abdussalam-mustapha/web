@@ -16,9 +16,9 @@ const RAW: RoleInput[] = [
   },
   {
     t: "LZJ Esoleen Ltd", tag: "Fullstack Engineer", d: "Nov 2025 to Jun 2026", loc: "Remote", tech: ["React.js", "REST APIs"],
-    m: "Worked on a restaurant management system used by over 2,000 restaurants in Nigeria. I owned the React frontend modules and helped connect them to the backend.",
+    m: "Worked on a restaurant management system used by restaurants across Nigeria. I owned the React frontend modules and helped connect them to the backend.",
     list: [
-      "Worked on LZJ's Restaurant Management System, used by over 2,000 restaurants across Nigeria.",
+      "Worked on LZJ's Restaurant Management System, which restaurants across Nigeria use to run their day-to-day operations.",
       "The platform handles multi-branch control, live order tracking and financial analytics.",
       "I owned and delivered all the React frontend modules, turning complex restaurant operations into clean, responsive screens for managers.",
       "I worked across the stack to connect the frontend to the backend APIs behind workflows that automate daily restaurant operations.",
@@ -37,9 +37,9 @@ const RAW: RoleInput[] = [
   },
   {
     t: "Andersen Consulting", tag: "Frontend Engineer", d: "Apr to Oct 2025", loc: "Lagos", tech: ["Angular"],
-    m: "Built interfaces for a visitor management system in Angular, using modular, clean-architecture patterns inside an agile team.",
+    m: "Worked on interfaces for a visitor management system in Angular, using modular, clean-architecture patterns inside an agile team.",
     list: [
-      "Built responsive, friendly interfaces for a Visitor Management System in Angular.",
+      "Worked on responsive, friendly interfaces for a Visitor Management System in Angular.",
       "Improved maintainability and performance through modular design and clean architecture.",
       "Worked in a cross-functional agile team under a lead engineer.",
     ],

@@ -23,14 +23,14 @@ export default function Page() {
         <p className="lab"><span>Case study</span><span>Port66</span></p>
         <h2>Port66</h2>
         <p>A marketplace for authenticated luxury fashion, watches and collectibles. Collectors follow each other, and real pieces are tied to on-chain pools.</p>
-        <Row label="Role"><p>CTO. I built the frontend, backend and smart contracts, and make the architecture decisions.</p></Row>
+        <Row label="Role"><p>CTO. I worked on the frontend, backend and smart contracts, and make the architecture decisions.</p></Row>
         <Row label="Problem"><p>Luxury resale runs on trust. Buyers need proof a piece is real and a record of where it has been.</p></Row>
-        <Row label="What I built">
+        <Row label="The product">
           <p>
-            Three connected products. A collectors marketplace for buying and selling fashion, cards and watches. A brand partnerships
-            tower: seven billboard screens, booked a day at a time, where the top bid takes a screen for 24 hours. And a real-world
-            asset hub where people buy into iconic pieces as tokens, trade them on an exchange, and get paid out if a piece is bought
-            out. It runs on Solana with USDC.
+            One platform for authenticated luxury collectibles. At its heart is a collectors marketplace for buying and selling
+            fashion, cards and watches. Around it, brands book the seven billboard screens of a 3D tower a day at a time, with the
+            top bid taking a screen for 24 hours, and collectors buy into iconic real-world pieces as tokens, trade them on an
+            exchange, and get paid out if a piece is bought out. All of it runs on Solana with USDC.
           </p>
         </Row>
         <Row label="Stack"><p>Next.js and Solana.{SHOW_PLACEHOLDERS && <span className="ph"> Add the rest here.</span>}</p></Row>

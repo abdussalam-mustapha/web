@@ -1,6 +1,8 @@
 import { Whiteboard } from "@/components/home/Whiteboard";
 import { Board } from "@/components/notes/Board";
 import { CountUp } from "@/components/ui/CountUp";
+import { ToolLogo } from "@/components/notes/ToolLogo";
+import { LINKS } from "@/data/contact";
 
 export default function Home() {
   return (
@@ -19,7 +21,7 @@ export default function Home() {
             { k: "eng", story: 0, nudge: true, t: "Engineering", tag: "Build", m: "CTO at Port66. Frontend, backend and smart contracts, from the first sketch to production.", h: "/engineering", c: "--accent", r: -2, go: "Unfold the story" },
             { k: "con", story: 1, t: "Content", tag: "Share", m: "Writing, bookmarks and the things I put out online. Ideas worth passing on.", h: "/content", c: "--c4", r: 1.5, go: "Unfold the story" },
             { k: "com", story: 2, t: "Community", tag: "Grow", m: "I built and led a community of hundreds at TechGen Africa, and I have served in OSSGuild and GDSC.", h: "/community", c: "--c2", r: -1, go: "Unfold the story" },
-            { k: "tea", story: 3, t: "Teaching", tag: "Impact", m: "STEMTisha FutureCoders: helping younger learners write their very first HTML.", h: "/teaching", c: "--c3", r: 2, go: "Unfold the story" },
+            { k: "tea", story: 3, t: "Teaching", tag: "Impact", m: "STEMTisha FutureCoders: opening up STEM and engineering to younger learners.", h: "/teaching", c: "--c3", r: 2, go: "Unfold the story" },
             { k: "fun", story: 4, t: "Fun", tag: "Play", m: "Anime, the gym and Strava kilometers. The part of me that is not code.", h: "/fun", c: "--c1", r: -1.5, go: "Unfold the story" },
             { k: "hi", story: 5, t: "Say hi", tag: "Contact", m: "Building something, or want to learn to? Let us talk.", h: "/about", c: "#c5f27a", r: 1, go: "Unfold the story" },
           ]}
@@ -27,6 +29,7 @@ export default function Home() {
         <Board
           small
           notes={[
+            { t: "GitHub", tag: "Code", logo: <ToolLogo slug="github" />, m: "Where my code lives.", h: LINKS.github, x: true, c: "#c5f27a", r: -1.5, mini: true, go: "Visit my GitHub" },
             { story: 6, t: "Never miss a lucky day", tag: "Mantra", m: "My personal mantra.", h: "/", c: "--accent", r: -2, mini: true, go: "Read it" },
             { t: "Best Intern", m: "TechGen Africa, 2022. Where it all started.", c: "--c4", r: 2, mini: true },
             { t: "Hello, Lagos", m: "Shipping from Nigeria, to anywhere.", c: "--c3", r: 1.5, mini: true },
