@@ -8,7 +8,7 @@ export const CHAPTERS: Chapter[] = [
   { id: "content", title: "Content", tag: "Share", blurb: "What I write, save and put out online.", c: "--c4" },
   { id: "community", title: "Community", tag: "Grow", blurb: "The people I have helped bring together.", c: "--c2" },
   { id: "teaching", title: "Teaching", tag: "Impact", blurb: "Opening up STEM and engineering to younger learners.", c: "--c3" },
-  { id: "hobbies", title: "Fun", tag: "Play", blurb: "Anime, the gym and Strava kilometers.", c: "--c1" },
+  { id: "hobbies", title: "Fun", tag: "Play", blurb: "Anime, gym sessions and long walks.", c: "--c1" },
   { id: "about", title: "Say hi", tag: "Contact", blurb: "Who I am, and how to reach me.", c: "#c5f27a" },
 ];
 
