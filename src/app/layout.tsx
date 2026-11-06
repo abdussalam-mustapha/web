@@ -13,7 +13,7 @@ const newsreader = Newsreader({ variable: "--font-newsreader", subsets: ["latin"
 const caveat = Caveat({ variable: "--font-caveat", subsets: ["latin"], weight: ["500", "700"] });
 
 export const metadata: Metadata = {
-  title: { default: "Mustapha, CTO, engineer and teacher", template: "%s | Mustapha" },
+  title: { default: "Mustapha", template: "%s | Mustapha" },
   description: "Mustapha is CTO of Port66, a full-stack and smart contract engineer, and a tech educator.",
 };
 
